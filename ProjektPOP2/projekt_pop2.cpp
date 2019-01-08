@@ -15,15 +15,14 @@ int main()
     fstream wyjscie;
 
     wejscie.open("Metar_EPGD_2013_12_05.txt", ios::in);
-    wyjscie.open("wyjœcie.txt", ios::out);
+    wyjscie.open("wyjscie.txt", ios::out);
 
     if(!wejscie)
     {
         cout << "Blad otwarcia plikow.\n";
         exit(0);
     }
-    else
-    {
+
         string linia;
         string slowo;
 
@@ -38,49 +37,48 @@ int main()
             string temperatura;
             string cisnienie;
             stringstream ss;
-            ss << slowo;
+            ss << linia;
 
-            while (ss << slowo)
+            while (ss >> slowo)
             {
+
             int x=0;
-            for(int i=0;i<20;i++)
-            {
-                if(slowo[i]!=NULL)
-                    x++;
-                else
-                    break;
-            }
+            x=slowo.length();
+
 
             switch(x)
             {
             case 7:
-                if(slowo[6]=='Z')//czas
+                if(slowo[6]=='Z')
                 {
-                    czas=slowo[2]+slowo[3]+slowo[4]+slowo[5];
+                    czas=slowo.substr(2,4);
                 }
+
+
                 break;
             case 10:
-                if(slowo[8]=='K' && slowo[9]=='T') //kierunek i predkosc wiatru
+                if(slowo[8]=='K' && slowo[9]=='T')
                 {
-                    wiatr=slowo[0]+slowo[1]+slowo[2]+slowo[3]+slowo[4]+slowo[6]+slowo[7];
+                    wiatr=slowo.substr(0,8);
                 }
 
                 break;
 
             case 5:
-                if(slowo[2]=='/') //temperatura
+                if(slowo[2]=='/')
                 {
-                    temperatura=slowo[0]+slowo[1];
+                    temperatura=slowo.substr(0,2);
+                }
+                if(slowo[0]=='Q')
+                {
+                    cisnienie=slowo.substr(1,4);if(slowo[0]=='Q')
+                {
+                    cisnienie=slowo.substr(1,4);
+                }
                 }
 
                 break;
-            case 8:
-                if(slowo[0]=='Q') //cisnienie
-                {
-                    cisnienie=slowo[1]+slowo[2]+slowo[3]+slowo[4];
-                }
 
-                break;
             }
             }
                wyjscie << "Czas UTC: ";
@@ -92,7 +90,7 @@ int main()
                wyjscie << wiatr[3] << wiatr[4];
                wyjscie << " wezlow w porywach do ";
                wyjscie << wiatr[6] << wiatr[7];
-               wyjscie << "\n";
+               wyjscie << " wezlow\n";
                wyjscie << "temperatura: ";
                wyjscie << temperatura[0] << temperatura[1];
                wyjscie << " stopni C \n";
@@ -102,12 +100,8 @@ int main()
                wyjscie << " hPa\n\n";
 
 
-
-
-
-
         }
-    }
+
 
     wejscie.close();
     wyjscie.close();
